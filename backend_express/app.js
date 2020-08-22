@@ -49,8 +49,8 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-app.get('/twoexpress', (req, res) => {
-    const url = 'http://127.0.0.1:5000/twoflask'
+app.get('/summarizetext', (req, res) => {
+    const url = 'http://127.0.0.1:5000/callbert'
     axios.get(url, {
         params: {
             'working_dir': working_dir,
