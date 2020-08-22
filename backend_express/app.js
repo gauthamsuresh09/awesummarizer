@@ -47,10 +47,11 @@ app.get('/', (req, res) => {
 })
 
 app.get('/twoexpress', (req, res) => {
+    const inputFile = `${__dirname}/${req.file.originalname}`;
     axios.get('http://127.0.0.1:5000/twoflask', {
     // axios.get(':5000/twoflask', {
         params: {
-            ID: 12345
+            'videofilepath': inputFile
         }
     })
       .then(function (response) {

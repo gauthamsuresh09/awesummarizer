@@ -1,5 +1,5 @@
-import requests
-from flask import Flask
+import v1_pipeline
+from flask import Flask, request
 app = Flask(__name__)
 
 @app.route("/")
@@ -8,4 +8,7 @@ def hello():
 
 @app.route("/twoflask")
 def two():
-    return "2 from flask!"
+    inputdir = request.args.get('videofilepath')
+    return v1_pipeline.convert_mp4_to_audio_and_summarize_transcript(inputdir)
+    # return "2 from flask!"
+
