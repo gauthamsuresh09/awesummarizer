@@ -8,6 +8,7 @@ const uuidv4 = require('uuid/v4');
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
+const axios = require('axios');
 
 const MediaServices = require('azure-arm-mediaservices');
 const msRestAzure = require('ms-rest-azure');
@@ -40,8 +41,29 @@ const port = 3000
 
 const app = express();
 
+
 app.get('/', (req, res) => {
     res.send('Hello World!')
+})
+
+app.get('/twoexpress', (req, res) => {
+    axios.get('http://127.0.0.1:5000/twoflask', {
+    // axios.get(':5000/twoflask', {
+        params: {
+            ID: 12345
+        }
+    })
+      .then(function (response) {
+          console.log(response);
+          res.send(JSON.stringify(response))
+      })
+      .catch(function (error) {
+          console.log(error);
+          res.send(JSON.stringify(error))
+      })
+      .then(function () {
+          // always executed
+      });
 })
 
 app.post('/upload', upload.single('video'), function (req, res) {

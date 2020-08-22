@@ -17,6 +17,7 @@
     },
     "homepage": "https://github.com/Diogenes2001/timestamp-generation#readme",
     "dependencies": {
+        "axios": "^0.20.0",
         "azure-arm-mediaservices": "^4.0.0",
         "azure-storage": "^2.8.0",
         "dotenv": "^8.2.0",
