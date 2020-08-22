@@ -49,28 +49,6 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-app.get('/summarizetext', (req, res) => {
-    const url = 'http://127.0.0.1:5000/callbert'
-    axios.get(url, {
-        params: {
-            'working_dir': working_dir,
-            'videofilepath': video_path,
-        }
-    })
-      .then(function (response) {
-          // console.log('done POST')
-          // console.log(response);
-          console.log(response.data);
-          res.send("success!")
-      })
-      .catch(function (error) {
-          console.log(error);
-      })
-      .then(function () {
-          // always executed
-      });
-})
-
 app.post('/upload', upload.single('video'), function (req, res) {
     if (!req.file) {
         return res.status(400).send('No files were uploaded.');
@@ -117,6 +95,7 @@ app.post('/upload', upload.single('video'), function (req, res) {
             }, async function (err, credentials, subscriptions) {
                 if (err) return console.log(err);
                 azureMediaServicesClient = new MediaServices(credentials, subscriptionId, armEndpoint, { noRetryPolicy: true });
+                let urls;
 
                 try {
 
@@ -149,7 +128,7 @@ app.post('/upload', upload.single('video'), function (req, res) {
 
                         let locator = await createStreamingLocator(resourceGroup, accountName, outputAsset.name, locatorName);
 
-                        let urls = await getStreamingUrls(resourceGroup, accountName, locator.name);
+                        urls = await getStreamingUrls(resourceGroup, accountName, locator.name);
 
                         console.log("deleting jobs ...");
                         await azureMediaServicesClient.jobs.deleteMethod(resourceGroup, accountName, encodingTransformName, jobName);
@@ -168,6 +147,33 @@ app.post('/upload', upload.single('video'), function (req, res) {
                         console.log(`${job.name} is still in progress.  Current state is ${job.state}.`);
                     }
                     console.log("done with sample");
+
+                    // call BERT microservice
+                    const url = 'http://127.0.0.1:5000/callbert'
+                    axios.get(url, {
+                        params: {
+                            'working_dir': working_dir,
+                            'videofilepath': video_path,
+                        }
+                    })
+                      .then(function (response) {
+                          // console.log('done POST')
+                          // console.log(response);
+                          // res.send(urls)
+                          // res.send(response.data)
+                          // console.log(response.data);
+
+                          // res.send("success!")
+                          let ret = urls
+                          ret['summary'] = response.data
+                          res.send(ret)
+                      })
+                      .catch(function (error) {
+                          console.log(error);
+                      })
+                      .then(function () {
+                          // always executed
+                      });
                 } catch (err) {
                     console.log(err);
                 }
@@ -296,7 +302,8 @@ app.post('/upload', upload.single('video'), function (req, res) {
                     console.log("https://" + streamingEndpoint.hostName + "//" + path);
                     final_urls[i] = "https://" + streamingEndpoint.hostName + "//" + path;
                 }
-                res.send({ "urls": final_urls });
+                return { "urls": final_urls }
+                // res.send({ "urls": final_urls });
             }
 
         })
