@@ -1,0 +1,28 @@
+{
+    "name": "backend_express",
+    "version": "1.0.0",
+    "description": "--- page_type: sample languages: - javascript products: - azure description: \"This repository contains samples showing how to use Azure Media Services v3 API using node.js.\" urlFragment: media-services-v3-node-tutorials ---",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Diogenes2001/timestamp-generation.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Diogenes2001/timestamp-generation/issues"
+    },
+    "homepage": "https://github.com/Diogenes2001/timestamp-generation#readme",
+    "dependencies": {
+        "azure-arm-mediaservices": "^4.0.0",
+        "azure-storage": "^2.8.0",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "ms-rest": "^2.3.3",
+        "ms-rest-azure": "^2.5.5",
+        "multer": "^1.4.2"
+    }
+}
