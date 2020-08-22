@@ -80,7 +80,8 @@ app.post('/upload', upload.single('video'), function (req, res) {
             reject();
         }
     })
-    let final_urls;
+    let final_urls = [];
+    const video_path = `${__dirname}/${req.file.originalname}`;
 
     promise
         .then(function (response) {
