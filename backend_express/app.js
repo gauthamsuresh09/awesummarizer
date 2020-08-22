@@ -41,26 +41,30 @@ const port = 3000
 
 const app = express();
 
+// default video path name
+let working_dir = `${__dirname}`;
+let video_path = `${__dirname}/end.mp4`;
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
 app.get('/twoexpress', (req, res) => {
-    const inputFile = `${__dirname}/${req.file.originalname}`;
-    axios.get('http://127.0.0.1:5000/twoflask', {
-    // axios.get(':5000/twoflask', {
+    const url = 'http://127.0.0.1:5000/twoflask'
+    axios.get(url, {
         params: {
-            'videofilepath': inputFile
+            'working_dir': working_dir,
+            'videofilepath': video_path,
         }
     })
       .then(function (response) {
-          console.log(response);
-          res.send(JSON.stringify(response))
+          // console.log('done POST')
+          // console.log(response);
+          console.log(response.data);
+          res.send("success!")
       })
       .catch(function (error) {
           console.log(error);
-          res.send(JSON.stringify(error))
       })
       .then(function () {
           // always executed
@@ -81,7 +85,7 @@ app.post('/upload', upload.single('video'), function (req, res) {
         }
     })
     let final_urls = [];
-    const video_path = `${__dirname}/${req.file.originalname}`;
+    video_path = `${__dirname}/${req.file.originalname}`;
 
     promise
         .then(function (response) {
