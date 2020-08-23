@@ -1,5 +1,21 @@
 const axios = require('axios');
 
+Promise.all([promise1, promise2, promise3]).then( (values) => {
+	console.log('All promise resolved!')
+	console.log(values[0] + values[1])
+	// console.log('done POST')
+	// console.log(response);
+	// res.send(urls)
+	// res.send(response.data)
+	// console.log(response.data);
+
+	// res.send("success!")
+	let ret = {}
+	ret['summary'] = values[2].data
+	console.log(ret)
+	// res.send(ret)
+});
+
 const promise1 = new Promise( (resolve, reject) => {
 	resolve(1)
 })
@@ -18,18 +34,3 @@ const promise3 = axios.get(url, {
 	}
 }).catch((error) => console.log(error));
 
-Promise.all([promise1, promise2, promise3]).then( (values) => {
-	console.log('All promise resolved!')
-	console.log(values[0] + values[1])
-		// console.log('done POST')
-		// console.log(response);
-		// res.send(urls)
-		// res.send(response.data)
-		// console.log(response.data);
-
-		// res.send("success!")
-		let ret = {}
-		ret['summary'] = values[2].data
-		console.log(ret)
-		// res.send(ret)
-})
