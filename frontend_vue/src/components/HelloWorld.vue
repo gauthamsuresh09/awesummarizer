@@ -30,6 +30,8 @@
               x-large
               width = "150px"
               color="rgb(247, 178, 173)"
+              href="#section2"
+              v-smooth-scroll
             >
               Get Started
             </v-btn>
@@ -44,13 +46,19 @@
                 class="black--text"
                 contain="true"
 
+              ></v-img>
+            </v-col>
+          </v-row>
+        </v-responsive>
+      </div>
+
     <v-navigation-drawer
       v-model="left"
       fixed
       temporary
     ></v-navigation-drawer>
 
--->
+
 <v-app-bar
       app
       clipped-right
@@ -128,7 +136,6 @@
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
-    </section>
 </template>
 
 <script>
@@ -215,3 +222,10 @@
     }
   }
 </script>
+
+
+    <style scoped>
+    #section2 {
+      height: 600px;
+    }
+    </style>
