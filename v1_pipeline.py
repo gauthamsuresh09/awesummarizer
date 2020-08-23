@@ -38,4 +38,4 @@ def convert_mp4_to_audio_and_summarize_transcript(directory, file_path):
                 timestamps.append(txt2timestamp[utterance])
     timestamp_and_text = [{"timestamp": time, "text": text} for time, text in zip(timestamps, brief_list)]
     # print(timestamp_and_text)
-    return timestamp_and_text
+    return [timestamp_and_text, body]

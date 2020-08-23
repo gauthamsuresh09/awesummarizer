@@ -165,7 +165,8 @@ app.post('/upload', upload.single('video'), function (req, res) {
 
                           // res.send("success!")
                           let ret = urls
-                          ret['summary'] = response.data
+                          ret['summary'] = response.data[0]
+                          ret['transcript'] = response.data[1]
                           res.send(ret)
                       })
                       .catch(function (error) {
