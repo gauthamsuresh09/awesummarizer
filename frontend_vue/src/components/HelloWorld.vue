@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="inspire"><!--
     <v-navigation-drawer
       v-model="drawerRight"
       app
@@ -21,11 +21,11 @@
     <v-app-bar
       app
       clipped-right
-      color="blue-grey"
-      dark
+      color="white"
+      light
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>Toolbar</v-toolbar-title>
+      <v-toolbar-title>Timestamp</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight"></v-app-bar-nav-icon>
     </v-app-bar>
@@ -52,6 +52,16 @@
       temporary
     ></v-navigation-drawer>
 
+-->
+<v-app-bar
+      app
+      clipped-right
+      color="white"
+      light
+    >
+      <v-toolbar-title>Timestamp</v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-app-bar>
     <v-main>
     <template>
         <div class="container">
@@ -126,6 +136,26 @@
 <script>
   import axios from "axios";
 
+        // var myOptions = {
+        //     autoplay: true,
+        //     controls: true,
+        //     width: "640",
+        //     height: "400",
+        //     poster: ""
+        // };
+        // var myPlayer = amp("azuremediaplayer", myOptions);
+        // myPlayer.src(
+        //     [
+        //         { src: "//ams-samplescdn.streaming.mediaservices.windows.net/11196e3d-2f40-4835-9a4d-fc52751b0323/TearsOfSteel_WAMEH264SmoothStreaming720p.ism/manifest", type: "application/vnd.ms-sstr+xml" }, 
+        //     ],
+        //     [
+        //         { src: "//ams-samplescdn.streaming.mediaservices.windows.net/11196e3d-2f40-4835-9a4d-fc52751b0323/TOS-en.vtt", srclang: "en", kind: "subtitles", label: "english" },
+        //         { src: "//ams-samplescdn.streaming.mediaservices.windows.net/11196e3d-2f40-4835-9a4d-fc52751b0323/TOS-es.vtt", srclang: "es", kind: "subtitles", label: "spanish" },
+        //         { src: "//ams-samplescdn.streaming.mediaservices.windows.net/11196e3d-2f40-4835-9a4d-fc52751b0323/TOS-fr.vtt", srclang: "fr", kind: "subtitles", label: "french" },
+        //         { src: "//ams-samplescdn.streaming.mediaservices.windows.net/11196e3d-2f40-4835-9a4d-fc52751b0323/TOS-it.vtt", srclang: "it", kind: "subtitles", label: "italian" }
+        //     ]
+        // );
+    
   export default {
     props: {
       source: String,
