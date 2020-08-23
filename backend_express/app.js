@@ -30,6 +30,8 @@ const resourceGroup = process.env.resourceGroup;
 var multer = require('multer')
 
 const express = require('express')
+const cors = require('cors')
+
 var storage = multer.diskStorage({
     "destination": __dirname,
     filename: function (req, file, cb) {
@@ -40,13 +42,14 @@ var upload = multer({ storage: storage })
 const port = 3000
 
 const app = express();
+app.use(cors())
 
 // default video path name
 let working_dir = `${__dirname}`;
 let video_path = `${__dirname}/end.mp4`;
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.sendFile(__dirname + '/index.html')
 })
 
 app.post('/upload', upload.single('video'), function (req, res) {
