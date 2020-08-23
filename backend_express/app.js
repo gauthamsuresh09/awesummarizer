@@ -62,7 +62,6 @@ app.post('/upload', upload.single('video'), function (req, res) {
             reject();
         }
     })
-    let final_urls = [];
     video_path = `${__dirname}/${req.file.originalname}`;
 
     promise
@@ -71,9 +70,9 @@ app.post('/upload', upload.single('video'), function (req, res) {
 
             const namePrefix = "prefix";
 
-            const inputFile = `${__dirname}/${req.file.originalname}`;
+            const inputFile = video_path;
 
-            const encodingTransformName = "TransformWithAdaptiveStreamingPreset";
+            const transformName = "createdTransform";
 
             // constants
             const timeoutSeconds = 60 * 10;
@@ -81,10 +80,6 @@ app.post('/upload', upload.single('video'), function (req, res) {
 
             let azureMediaServicesClient;
             let blobName = null;
-
-            ///////////////////////////////////////////
-            //     Entrypoint for sample script      //
-            ///////////////////////////////////////////
 
             msRestAzure.loginWithServicePrincipalSecret(aadClientId, aadSecret, aadTenantId, {
                 environment: {
@@ -105,7 +100,15 @@ app.post('/upload', upload.single('video'), function (req, res) {
                         odatatype: "#Microsoft.Media.BuiltInStandardEncoderPreset",
                         presetName: "AdaptiveStreaming"
                     };
-                    let encodingTransform = await ensureTransformExists(resourceGroup, accountName, encodingTransformName, adaptiveStreamingTransform);
+
+                    let videoAnalyzerTransform = {
+                        odatatype: "#Microsoft.Media.VideoAnalyzerPreset",
+                        audioLanguage: null,
+                        insightsToExtract: "AudioInsightsOnly4",
+                        presetName: "VideoAnalyzerPreset"
+                    };
+
+                    let transform = await ensureTransformExists(resourceGroup, accountName, transformName, adaptiveStreamingTransform, videoAnalyzerTransform);
 
                     console.log("getting job input from arguments...");
                     let uniqueness = uuidv4();
@@ -118,10 +121,10 @@ app.post('/upload', upload.single('video'), function (req, res) {
                     let outputAsset = await createOutputAsset(resourceGroup, accountName, outputAssetName);
 
                     console.log("submitting job...");
-                    let job = await submitJob(resourceGroup, accountName, encodingTransformName, jobName, input, outputAsset.name);
+                    let job = await submitJob(resourceGroup, accountName, transformName, jobName, input, outputAsset.name);
 
                     console.log("waiting for job to finish...");
-                    job = await waitForJobToFinish(resourceGroup, accountName, encodingTransformName, jobName);
+                    job = await waitForJobToFinish(resourceGroup, accountName, transformName, jobName);
 
                     if (job.state == "Finished") {
                         // await downloadResults(resourceGroup, accountName, outputAsset.name, outputFolder);
@@ -131,7 +134,7 @@ app.post('/upload', upload.single('video'), function (req, res) {
                         urls = await getStreamingUrls(resourceGroup, accountName, locator.name);
 
                         console.log("deleting jobs ...");
-                        await azureMediaServicesClient.jobs.deleteMethod(resourceGroup, accountName, encodingTransformName, jobName);
+                        await azureMediaServicesClient.jobs.deleteMethod(resourceGroup, accountName, transformName, jobName);
                         // await azureMediaServicesClient.assets.deleteMethod(resourceGroup, accountName, outputAsset.name);
 
                         let jobInputAsset = input;
@@ -149,32 +152,26 @@ app.post('/upload', upload.single('video'), function (req, res) {
                     console.log("done with sample");
 
                     // call BERT microservice
-                    const url = 'http://127.0.0.1:5000/callbert'
+                    const url = 'http://127.0.0.1:5000/callbert';
+                    console.log("axios fetch")
                     axios.get(url, {
                         params: {
                             'working_dir': working_dir,
                             'videofilepath': video_path,
                         }
                     })
-                      .then(function (response) {
-                          // console.log('done POST')
-                          // console.log(response);
-                          // res.send(urls)
-                          // res.send(response.data)
-                          // console.log(response.data);
-
-                          // res.send("success!")
-                          let ret = urls
-                          ret['summary'] = response.data[0]
-                          ret['transcript'] = response.data[1]
-                          res.send(ret)
-                      })
-                      .catch(function (error) {
-                          console.log(error);
-                      })
-                      .then(function () {
-                          // always executed
-                      });
+                    .then(function (response) {
+                        let ret = urls
+                        ret['summary'] = response.data[0]
+                        ret['transcript'] = response.data[1]
+                        res.send(ret)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                    .then(function () {
+                        // always executed
+                    });
                 } catch (err) {
                     console.log(err);
                 }
@@ -203,6 +200,10 @@ app.post('/upload', upload.single('video'), function (req, res) {
 
             async function submitJob(resourceGroup, accountName, transformName, jobName, jobInput, outputAssetName) {
                 let jobOutputs = [
+                    {
+                        odatatype: "#Microsoft.Media.JobOutputAsset",
+                        assetName: outputAssetName
+                    },
                     {
                         odatatype: "#Microsoft.Media.JobOutputAsset",
                         assetName: outputAssetName
@@ -262,14 +263,17 @@ app.post('/upload', upload.single('video'), function (req, res) {
                 return asset;
             }
 
-            async function ensureTransformExists(resourceGroup, accountName, transformName, preset) {
+            async function ensureTransformExists(resourceGroup, accountName, transformName, preset1, preset2) {
                 let transform = await azureMediaServicesClient.transforms.get(resourceGroup, accountName, transformName);
                 if (!transform) {
                     transform = await azureMediaServicesClient.transforms.createOrUpdate(resourceGroup, accountName, transformName, {
                         name: transformName,
                         location: region,
                         outputs: [{
-                            preset: preset
+                            preset: preset1
+                        },
+                        {
+                            preset: preset2
                         }]
                     });
                 }
@@ -297,13 +301,14 @@ app.post('/upload', upload.single('video'), function (req, res) {
                 let streamingEndpoint = await azureMediaServicesClient.streamingEndpoints.get(resourceGroup, accountName, "default");
 
                 let paths = await azureMediaServicesClient.streamingLocators.listPaths(resourceGroup, accountName, locatorName);
-                final_urls = [];
+                let urls = [];
                 for (let i = 0; i < paths.streamingPaths.length; i++) {
                     let path = paths.streamingPaths[i].paths[0];
-                    console.log("https://" + streamingEndpoint.hostName + "//" + path);
-                    final_urls[i] = "https://" + streamingEndpoint.hostName + "//" + path;
+                    // console.log("https://" + streamingEndpoint.hostName + "//" + path);
+                    console.log(paths.streamingPaths[i]);
+                    urls[i] = "https://" + streamingEndpoint.hostName + "//" + path;
                 }
-                return { "urls": final_urls }
+                return { "urls": urls }
                 // res.send({ "urls": final_urls });
             }
 

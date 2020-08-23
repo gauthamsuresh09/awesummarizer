@@ -15,3 +15,5 @@ def call_ML_pipeline():
     ret = json.dumps(v1_pipeline.convert_mp4_to_audio_and_summarize_transcript(directory, file_path))
     return ret
 
+if __name__ == "main":
+    app.run()
