@@ -53,26 +53,22 @@
     ></v-navigation-drawer>
 
 -->
-<v-app-bar
-      app
-      clipped-right
-      color="white"
-      light
-    >
-      <v-toolbar-title>Timestamp</v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-app-bar>
-    <v-main>
+  <v-app-bar
+    app
+    clipped-right
+    color="white"
+    light
+  >
+    <v-toolbar-title>Timestamp Generation</v-toolbar-title>
+    <v-spacer></v-spacer>
+  </v-app-bar>
+    <v-main class="mx-auto">
     <template>
-        <div class="container">
-          <div class="large-12 medium-12 small-12 cell">
-            <label>File
-              <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
-            </label>
-              <button v-on:click="submitFile()">Submit</button>
-          </div>
-        </div>
-      </template>
+      <div>
+        <v-file-input label="File input" v-on:change="handleFileUpload()"></v-file-input>
+        <v-btn small color="primary" v-on:click="submitFile()">Upload</v-btn>
+      </div>
+    </template>
       <video id="vid1" class="azuremediaplayer amp-default-skin" autoplay controls width="640" height="400" poster="poster.jpg" data-setup='{"nativeControlsForTouch": false}' cea708CaptionsSettings= '{ enabled: true, srclang: "en", label: "CC"}'>
           <source v-bind:src="url" type="application/vnd.ms-sstr+xml" />
           <p class="amp-no-js">
