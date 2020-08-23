@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="inspire"><!--
     <v-navigation-drawer
       v-model="drawerRight"
       app
@@ -21,11 +21,11 @@
     <v-app-bar
       app
       clipped-right
-      color="blue-grey"
-      dark
+      color="white"
+      light
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>Toolbar</v-toolbar-title>
+      <v-toolbar-title>Timestamp</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight"></v-app-bar-nav-icon>
     </v-app-bar>
@@ -52,6 +52,16 @@
       temporary
     ></v-navigation-drawer>
 
+-->
+<v-app-bar
+      app
+      clipped-right
+      color="white"
+      light
+    >
+      <v-toolbar-title>Timestamp</v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-app-bar>
     <v-main>
       <v-container
         class="fill-height"
@@ -61,23 +71,23 @@
           justify="center"
           align="center"
         >
-          <v-col class="shrink">
-                    <video id="vid1" class="azuremediaplayer amp-default-skin" autoplay controls width="640" height="400" poster="poster.jpg" data-setup='{"nativeControlsForTouch": false}' cea708CaptionsSettings= '{ enabled: true, srclang: "en", label: "CC"}'>
-            <source src="http://amssamples.streaming.mediaservices.windows.net/91492735-c523-432b-ba01-faba6c2206a2/AzureMediaServicesPromo.ism/manifest" type="application/vnd.ms-sstr+xml" />
-            <p class="amp-no-js">
-                To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video
-            </p>
-        </video>
+          <v-col md="shrink">
+                    <video id="vid1" class="azuremediaplayer amp-default-skin" autoplay controls width="640" height="400" poster="poster.jpg" data-setup='{"nativeControlsForTouch": false}'>
+                      <source v-bind:src="getUrl()" type="application/vnd.ms-sstr+xml" />
+                      <p class="amp-no-js">
+                          To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video
+                      </p>
+                    </video>
             <v-tooltip right>
               <template v-slot:activator="{ on }">
                 <v-btn
-                  :href="source"
-                  icon
-                  large
+                  :href="Transcript"
+                  raised
+                  small
                   target="_blank"
                   v-on="on"
                 >
-                  <v-icon large>mdi-code-tags</v-icon>
+                  <p>Transcript</p>
                 </v-btn>
               </template>
               <span>Source</span>
@@ -108,15 +118,39 @@
 
 <script>
 
+        // var myOptions = {
+        //     autoplay: true,
+        //     controls: true,
+        //     width: "640",
+        //     height: "400",
+        //     poster: ""
+        // };
+        // var myPlayer = amp("azuremediaplayer", myOptions);
+        // myPlayer.src(
+        //     [
+        //         { src: "//ams-samplescdn.streaming.mediaservices.windows.net/11196e3d-2f40-4835-9a4d-fc52751b0323/TearsOfSteel_WAMEH264SmoothStreaming720p.ism/manifest", type: "application/vnd.ms-sstr+xml" }, 
+        //     ],
+        //     [
+        //         { src: "//ams-samplescdn.streaming.mediaservices.windows.net/11196e3d-2f40-4835-9a4d-fc52751b0323/TOS-en.vtt", srclang: "en", kind: "subtitles", label: "english" },
+        //         { src: "//ams-samplescdn.streaming.mediaservices.windows.net/11196e3d-2f40-4835-9a4d-fc52751b0323/TOS-es.vtt", srclang: "es", kind: "subtitles", label: "spanish" },
+        //         { src: "//ams-samplescdn.streaming.mediaservices.windows.net/11196e3d-2f40-4835-9a4d-fc52751b0323/TOS-fr.vtt", srclang: "fr", kind: "subtitles", label: "french" },
+        //         { src: "//ams-samplescdn.streaming.mediaservices.windows.net/11196e3d-2f40-4835-9a4d-fc52751b0323/TOS-it.vtt", srclang: "it", kind: "subtitles", label: "italian" }
+        //     ]
+        // );
+    
   export default {
     props: {
       source: String,
     },
     data: () => ({
-      drawer: null,
-      drawerRight: null,
-      right: false,
-      left: false,
+      vidsrc: null
+      
     }),
+    methods: {
+      getUrl() {
+        this.vidsrc =  "http://amssamples.streaming.mediaservices.windows.net/91492735-c523-432b-ba01-faba6c2206a2/AzureMediaServicesPromo.ism/manifest";
+        return this.vidsrc;
+      }
+    }
   }
 </script>
