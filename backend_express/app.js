@@ -104,7 +104,7 @@ app.post('/upload', upload.single('video'), function (req, res) {
                     let videoAnalyzerTransform = {
                         odatatype: "#Microsoft.Media.VideoAnalyzerPreset",
                         audioLanguage: null,
-                        insightsToExtract: "AudioInsightsOnly4",
+                        insightsToExtract: "AudioInsightsOnly",
                         presetName: "VideoAnalyzerPreset"
                     };
 
