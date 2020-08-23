@@ -53,26 +53,22 @@
     ></v-navigation-drawer>
 
 -->
-<v-app-bar
-      app
-      clipped-right
-      color="white"
-      light
-    >
-      <v-toolbar-title>Timestamp</v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-app-bar>
-    <v-main>
+  <v-app-bar
+    app
+    clipped-right
+    color="white"
+    light
+  >
+    <v-toolbar-title>Timestamp Generation</v-toolbar-title>
+    <v-spacer></v-spacer>
+  </v-app-bar>
+    <v-main class="mx-auto">
     <template>
-        <div class="container">
-          <div class="large-12 medium-12 small-12 cell">
-            <label>File
-              <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
-            </label>
-              <button v-on:click="submitFile()">Submit</button>
-          </div>
-        </div>
-      </template>
+      <div>
+        <v-file-input label="File input" @change="selectFile"></v-file-input>
+        <v-btn small color="primary" v-on:click="submitFile()">Upload</v-btn>
+      </div>
+    </template>
       <video id="vid1" class="azuremediaplayer amp-default-skin" autoplay controls width="640" height="400" poster="poster.jpg" data-setup='{"nativeControlsForTouch": false}' cea708CaptionsSettings= '{ enabled: true, srclang: "en", label: "CC"}'>
           <source v-bind:src="url" type="application/vnd.ms-sstr+xml" />
           <p class="amp-no-js">
@@ -178,34 +174,34 @@
     }),
 
     methods: {
-        handleFileUpload(){
-          this.file = this.$refs.file.files[0];
+        selectFile(file) {
+          this.file = file;
         },
 
         submitFile(){
           console.log('uploading file...')
-          axios //
-          this.transcript = "some transcript";
-          this.url = "http://amssamples.streaming.mediaservices.windows.net/622b189f-ec39-43f2-93a2-201ac4e31ce1/BigBuckBunny.ism/manifest";
-          this.summary = [{ text: "aaaaaaaaaa", timestamp: 100 }, { text: "bbbbbb", timestamp: 200 }]
-          // let formData = new FormData();
-          // formData.append('video', this.file);
-          // axios.post('http://localhost:3000/upload',
-          //   formData,
-          //   {
-          //     headers: {
-          //         'Content-Type': 'multipart/form-data'
-          //     }
-          //   }
-          // ).then(function(res){
-          //   console.log('SUCCESS!!');
-          //   this.transcript = res.data['transcript'];
-          //   this.summary = res.data['summary'];
-          //   this.url = res.data['urls'][2];
-          // })
-          // .catch(function(){
-          //   console.log('FAILURE!!');
-          // });
+          // axios //
+          // this.transcript = "some transcript";
+          // this.url = "http://amssamples.streaming.mediaservices.windows.net/622b189f-ec39-43f2-93a2-201ac4e31ce1/BigBuckBunny.ism/manifest";
+          // this.summary = [{ text: "aaaaaaaaaa", timestamp: 100 }, { text: "bbbbbb", timestamp: 200 }]
+          let formData = new FormData();
+          formData.append('video', this.file);
+          axios.post('http://localhost:3000/upload',
+            formData,
+            {
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
+            }
+          ).then(function(res){
+            console.log('SUCCESS!!');
+            this.transcript = res.data['transcript'];
+            this.summary = res.data['summary'];
+            this.url = res.data['urls'][2];
+          })
+          .catch(function(){
+            console.log('FAILURE!!');
+          });
           // function parseTimestamps(timestamps){
           //   var output = "";
           //   timestamps.forEach(pair =>
