@@ -84,17 +84,17 @@ app.post('/upload', upload.single('video'), function (req, res) {
                     'videofilepath': video_path,
                 }
             })
-            .catch(function (error) {
-                console.log(error);
-            })
-            .then((response) => {
-              return response.data;
-            });
+                .catch(function (error) {
+                    console.log(error);
+                })
+                .then((response) => {
+                    return response.data;
+                });
 
             // amsPromise = new Promise((resolve, reject) => {
             //     resolve('amsPromise promise fulfilled!');
             // });
-            amsPromise = new Promise( (resolve, reject) => {
+            amsPromise = new Promise((resolve, reject) => {
                 console.log(response);
 
                 const namePrefix = "prefix";
@@ -284,10 +284,10 @@ app.post('/upload', upload.single('video'), function (req, res) {
                     };
 
                     let locator = await azureMediaServicesClient.streamingLocators.create(
-                      resourceGroup,
-                      accountName,
-                      locatorName,
-                      streamingLocator);
+                        resourceGroup,
+                        accountName,
+                        locatorName,
+                        streamingLocator);
 
                     return locator;
                 }
@@ -308,7 +308,7 @@ app.post('/upload', upload.single('video'), function (req, res) {
                 }
             });
 
-            Promise.all([amsPromise, microservicePromise]).then( (values) => {
+            Promise.all([amsPromise, microservicePromise]).then((values) => {
                 console.log('All promises resolved!')
                 // res.send("success!")
                 let ret = {};
@@ -318,8 +318,6 @@ app.post('/upload', upload.single('video'), function (req, res) {
                 console.log(ret)
                 res.send(ret)
             });
-
-
         })
         .catch(function () {
             res.status(500).send('Server Error');

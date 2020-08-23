@@ -136,3 +136,4 @@ _templates
 
 secrets.json
 .env
+backend_express/package-lock.json
