@@ -295,7 +295,7 @@ app.post('/upload', upload.single('video'), function (req, res) {
                     let streamingEndpoint = await azureMediaServicesClient.streamingEndpoints.get(resourceGroup, accountName, "default");
 
                     let paths = await azureMediaServicesClient.streamingLocators.listPaths(resourceGroup, accountName, locatorName);
-                    final_urls = [];
+                    let final_urls = [];
                     for (let i = 0; i < paths.streamingPaths.length; i++) {
                         let path = paths.streamingPaths[i].paths[0];
                         console.log("https://" + streamingEndpoint.hostName + "//" + path);
@@ -309,8 +309,9 @@ app.post('/upload', upload.single('video'), function (req, res) {
                 console.log('All promises resolved!')
                 // res.send("success!")
                 let ret = {};
-                ret['urls'] = values[0]; // urls
-                ret['summary'] = values[1]// timestamps and summary text
+                ret['urls'] = values[0];
+                ret['summary'] = values[1][0] // timestamps and summary text
+                ret['transcript'] = values[1][1] // timestamps and summary text
                 console.log(ret)
                 res.send(ret)
             });
