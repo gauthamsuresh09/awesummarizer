@@ -65,7 +65,7 @@
     <v-main class="mx-auto">
     <template>
       <div>
-        <v-file-input label="File input" v-on:change="handleFileUpload()"></v-file-input>
+        <v-file-input label="File input" @change="selectFile"></v-file-input>
         <v-btn small color="primary" v-on:click="submitFile()">Upload</v-btn>
       </div>
     </template>
@@ -174,34 +174,34 @@
     }),
 
     methods: {
-        handleFileUpload(){
-          this.file = this.$refs.file.files[0];
+        selectFile(file) {
+          this.file = file;
         },
 
         submitFile(){
           console.log('uploading file...')
-          axios //
-          this.transcript = "some transcript";
-          this.url = "http://amssamples.streaming.mediaservices.windows.net/622b189f-ec39-43f2-93a2-201ac4e31ce1/BigBuckBunny.ism/manifest";
-          this.summary = [{ text: "aaaaaaaaaa", timestamp: 100 }, { text: "bbbbbb", timestamp: 200 }]
-          // let formData = new FormData();
-          // formData.append('video', this.file);
-          // axios.post('http://localhost:3000/upload',
-          //   formData,
-          //   {
-          //     headers: {
-          //         'Content-Type': 'multipart/form-data'
-          //     }
-          //   }
-          // ).then(function(res){
-          //   console.log('SUCCESS!!');
-          //   this.transcript = res.data['transcript'];
-          //   this.summary = res.data['summary'];
-          //   this.url = res.data['urls'][2];
-          // })
-          // .catch(function(){
-          //   console.log('FAILURE!!');
-          // });
+          // axios //
+          // this.transcript = "some transcript";
+          // this.url = "http://amssamples.streaming.mediaservices.windows.net/622b189f-ec39-43f2-93a2-201ac4e31ce1/BigBuckBunny.ism/manifest";
+          // this.summary = [{ text: "aaaaaaaaaa", timestamp: 100 }, { text: "bbbbbb", timestamp: 200 }]
+          let formData = new FormData();
+          formData.append('video', this.file);
+          axios.post('http://localhost:3000/upload',
+            formData,
+            {
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
+            }
+          ).then(function(res){
+            console.log('SUCCESS!!');
+            this.transcript = res.data['transcript'];
+            this.summary = res.data['summary'];
+            this.url = res.data['urls'][2];
+          })
+          .catch(function(){
+            console.log('FAILURE!!');
+          });
           // function parseTimestamps(timestamps){
           //   var output = "";
           //   timestamps.forEach(pair =>
