@@ -1,68 +1,54 @@
 <template>
-  <v-app id="inspire"><!--
-    <v-navigation-drawer
-      v-model="drawerRight"
-      app
-      clipped
-      right
-    >
-      <v-list dense>
-        <v-list-item @click.stop="right = !right">
-          <v-list-item-action>
-            <v-icon>mdi-exit-to-app</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Open Temporary Drawer</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-app-bar
+  <v-app id="inspire"><v-app-bar
       app
       clipped-right
       color="white"
       light
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>Timestamp</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight"></v-app-bar-nav-icon>
-    </v-app-bar>
-
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-    >
-      <v-list dense>
-        <v-list-item @click.stop="left = !left">
-          <v-list-item-action>
-            <v-icon>mdi-exit-to-app</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>Open Temporary Drawer</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-navigation-drawer
-      v-model="left"
-      fixed
-      temporary
-    ></v-navigation-drawer>
-
--->
-<v-app-bar
-      app
-      clipped-right
-      color="white"
-      light
-    >
-      <v-toolbar-title>Timestamp</v-toolbar-title>
+    <v-spacer></v-spacer>
+      <v-toolbar-title>AweSummarizer</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-app-bar>
     <v-main>
+      <div style="padding: 150px 0px 100px 150px">
+        <v-responsive
+          class="d-flex align-center"
+          height="100%"
+          width="100%"
+        >
+          <v-row>
+            <v-col cols="6">
+          <div
+            :class="$vuetify.breakpoint.smAndDown ? 'flex-column align-start' : 'align-center'"
+            class="d-flex flex-wrap"
+          >
+          <h1 style="font-size: 110px; line-height: 100%">Find what you want in your lectures.</h1>
+            <v-btn
+              :ripple="false"
+              class="pa-1"
+              tile
+              x-large
+              width = "150px"
+              color="rgb(247, 178, 173)"
+            >
+              Get Started
+            </v-btn>
+
+          </div>
+            </v-col>
+            <v-col>
+              <v-img
+                :max-height="maxHeight"
+                :max-width="maxWidth"
+                :src="require('@/assets/home_computer.svg')"
+                class="black--text"
+                contain="true"
+
+              ></v-img>
+            </v-col>
+          </v-row>
+        </v-responsive>
+      </div>
       <v-container
         class="fill-height"
         fluid
@@ -109,11 +95,11 @@
       color="blue-grey"
       class="white--text"
     >
-      <span>Vuetify</span>
       <v-spacer></v-spacer>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
+    </section>
 </template>
 
 <script>
@@ -143,8 +129,9 @@
       source: String,
     },
     data: () => ({
-      vidsrc: null
-      
+      vidsrc: null,
+      maxHeight: 500,
+      maxWidth: 500
     }),
     methods: {
       getUrl() {
