@@ -53,38 +53,55 @@
     ></v-navigation-drawer>
 
     <v-main>
-      <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          justify="center"
-          align="center"
-        >
-          <v-col class="shrink">
-                    <video id="vid1" class="azuremediaplayer amp-default-skin" autoplay controls width="640" height="400" poster="poster.jpg" data-setup='{"nativeControlsForTouch": false}' cea708CaptionsSettings= '{ enabled: true, srclang: "en", label: "CC"}'>
-            <source src="http://amssamples.streaming.mediaservices.windows.net/91492735-c523-432b-ba01-faba6c2206a2/AzureMediaServicesPromo.ism/manifest" type="application/vnd.ms-sstr+xml" />
-            <p class="amp-no-js">
-                To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video
-            </p>
-        </video>
-            <v-tooltip right>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  :href="source"
-                  icon
-                  large
-                  target="_blank"
-                  v-on="on"
-                >
-                  <v-icon large>mdi-code-tags</v-icon>
-                </v-btn>
-              </template>
-              <span>Source</span>
-            </v-tooltip>
-          </v-col>
-        </v-row>
-      </v-container>
+    <template>
+        <div class="container">
+          <div class="large-12 medium-12 small-12 cell">
+            <label>File
+              <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
+            </label>
+              <button v-on:click="submitFile()">Submit</button>
+          </div>
+        </div>
+      </template>
+      <video id="vid1" class="azuremediaplayer amp-default-skin" autoplay controls width="640" height="400" poster="poster.jpg" data-setup='{"nativeControlsForTouch": false}' cea708CaptionsSettings= '{ enabled: true, srclang: "en", label: "CC"}'>
+          <source v-bind:src="url" type="application/vnd.ms-sstr+xml" />
+          <p class="amp-no-js">
+              To view this video please enable JavaScript, and consider upgrading to a web browser that supports HTML5 video
+          </p>
+      </video>
+      <template>
+        <v-card>
+          <v-tabs
+            v-model="tab"
+            background-color="primary"
+            dark
+          >
+            <v-tab key="transcript">
+            Transcript
+            </v-tab>
+            <v-tab key="summary">
+            Summary with Timestamps
+            </v-tab>
+          </v-tabs>
+
+          <v-tabs-items v-model="tab">
+            <v-tab-item>
+              <v-card flat>
+                <v-card-text>{{ transcript }}</v-card-text>
+              </v-card>
+            </v-tab-item>
+            <v-tab-item>
+              <v-card 
+              v-for="item in summary"
+              :key="item.timestamp"
+              flat
+              >
+                <v-card-text>{{ item.timestamp }}: {{ item.text }}</v-card-text>
+              </v-card>
+            </v-tab-item>
+          </v-tabs-items>
+        </v-card>
+      </template>
     </v-main>
 
     <v-navigation-drawer
@@ -107,16 +124,66 @@
 </template>
 
 <script>
+  import axios from "axios";
 
   export default {
     props: {
       source: String,
+      id: String
     },
     data: () => ({
       drawer: null,
       drawerRight: null,
       right: false,
       left: false,
+      file: '',
+      transcript: '',
+      summary: [],
+      url: "",
+      tab: null,
+      items: [
+        { tab: 'Transcript', content: 'Tab 1 Content' },
+        { tab: 'Summary with Timestamps', content: 'Tab 2 Content' },
+      ],    
     }),
+
+    methods: {
+        handleFileUpload(){
+          this.file = this.$refs.file.files[0];
+        },
+
+        submitFile(){
+          console.log('uploading file...')
+          axios //
+          this.transcript = "some transcript";
+          this.url = "http://amssamples.streaming.mediaservices.windows.net/622b189f-ec39-43f2-93a2-201ac4e31ce1/BigBuckBunny.ism/manifest";
+          this.summary = [{ text: "aaaaaaaaaa", timestamp: 100 }, { text: "bbbbbb", timestamp: 200 }]
+          // let formData = new FormData();
+          // formData.append('video', this.file);
+          // axios.post('http://localhost:3000/upload',
+          //   formData,
+          //   {
+          //     headers: {
+          //         'Content-Type': 'multipart/form-data'
+          //     }
+          //   }
+          // ).then(function(res){
+          //   console.log('SUCCESS!!');
+          //   this.transcript = res.data['transcript'];
+          //   this.summary = res.data['summary'];
+          //   this.url = res.data['urls'][2];
+          // })
+          // .catch(function(){
+          //   console.log('FAILURE!!');
+          // });
+          // function parseTimestamps(timestamps){
+          //   var output = "";
+          //   timestamps.forEach(pair =>
+          //     output += pair['timestamp'] + ": " + pair['text'] + "\n"
+          //   )
+          //   return output
+          // }
+        }
+    }
   }
 </script>
