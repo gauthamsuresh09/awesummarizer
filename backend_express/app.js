@@ -104,7 +104,7 @@ app.post('/upload', upload.single('video'), function (req, res) {
                     let videoAnalyzerTransform = {
                         odatatype: "#Microsoft.Media.VideoAnalyzerPreset",
                         audioLanguage: null,
-                        insightsToExtract: "AudioInsightsOnly4",
+                        insightsToExtract: "AudioInsightsOnly",
                         presetName: "VideoAnalyzerPreset"
                     };
 
@@ -304,7 +304,7 @@ app.post('/upload', upload.single('video'), function (req, res) {
                 let urls = [];
                 for (let i = 0; i < paths.streamingPaths.length; i++) {
                     let path = paths.streamingPaths[i].paths[0];
-                    // console.log("https://" + streamingEndpoint.hostName + "//" + path);
+                    console.log("https://" + streamingEndpoint.hostName + "//" + path);
                     console.log(paths.streamingPaths[i]);
                     urls[i] = "https://" + streamingEndpoint.hostName + "//" + path;
                 }

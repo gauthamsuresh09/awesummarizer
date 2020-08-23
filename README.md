@@ -3,6 +3,8 @@
 sudo apt-get update
 sudo apt-get install libssl1.0.0 libasound2
 
+sudo apt-get install ffmpeg
+
 pip install -r requirements.txt
 
 cd timestamp-generation
