@@ -12,12 +12,12 @@ sudo apt-get install ffmpeg
 
 pip install -r requirements.txt
 
-cd timestamp-generation
+cd awesummarizer
 FLASK_APP=app.py flask run
 ```
 
 ## How to spin up Expressjs server
 ```
-cd timestamp-generation/backend_express
+cd awesummarizer/backend_express
 nodemon app.js
 ```
