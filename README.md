@@ -1,4 +1,8 @@
-# How to spin up Flask microservice for BERT
+# Welcome to AweSummarizer!
+Video demo: https://youtu.be/P_OeXx4os3U
+More details: https://devpost.com/software/awesummarizer
+
+## How to spin up Flask microservice for BERT
 ```
 sudo apt-get update
 sudo apt-get install libssl1.0.0 libasound2
@@ -11,7 +15,7 @@ cd timestamp-generation
 FLASK_APP=app.py flask run
 ```
 
-# How to spin up Expressjs server
+## How to spin up Expressjs server
 ```
 cd timestamp-generation/backend_express
 nodemon app.js
