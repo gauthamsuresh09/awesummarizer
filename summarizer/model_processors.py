@@ -19,7 +19,7 @@ class ModelProcessor(object):
 
     def __init__(
         self,
-        model: str = 'bert-large-uncased',
+        model: str = 'bert-base-uncased',
         custom_model: PreTrainedModel = None,
         custom_tokenizer: PreTrainedTokenizer = None,
         hidden: int = -2,
@@ -45,6 +45,7 @@ class ModelProcessor(object):
         self.reduce_option = reduce_option
         self.sentence_handler = sentence_handler
         self.random_state = random_state
+        print("Created summarizer")
 
     def process_content_sentences(self, body: str, min_length: int = 40, max_length: int = 600) -> List[str]:
         """
@@ -238,7 +239,7 @@ class Summarizer(ModelProcessor):
 
     def __init__(
         self,
-        model: str = 'bert-large-uncased',
+        model: str = 'bert-base-uncased',
         custom_model: PreTrainedModel = None,
         custom_tokenizer: PreTrainedTokenizer = None,
         hidden: int = -2,

@@ -5,7 +5,7 @@ import argparse
 def run():
     parser = argparse.ArgumentParser(description='Process and summarize lectures')
     parser.add_argument('-path', dest='path', default=None, help='File path of lecture')
-    parser.add_argument('-model', dest='model', default='bert-large-uncased', help='')
+    parser.add_argument('-model', dest='model', default='bert-base-uncased', help='')
     parser.add_argument('-hidden', dest='hidden', default=-2, help='Which hidden layer to use from Bert')
     parser.add_argument('-reduce-option', dest='reduce_option', default='mean', help='How to reduce the hidden layer from bert')
     parser.add_argument('-greedyness', dest='greedyness', help='Greedyness of the NeuralCoref model', default=0.45)

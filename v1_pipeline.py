@@ -3,6 +3,25 @@ import speech2text
 from summarizer import Summarizer
 
 
+model = Summarizer()
+
+def summarize_transcript(text):
+    body = text
+    raw_list = text.split('.')
+    result = model(body, min_length=60)
+    brief = ''.join(result)
+    print(brief)
+    brief_list = brief.split('.')
+    brief_list = [f'{sentence}.' for sentence in brief_list]
+
+    print('original length: ', len(body))
+    print('summary length: ', len(brief))
+    print('original/summary: ', len(body)/len(brief))
+    print('original sentence count: ', len(raw_list))
+    print('summary sentence count: ', len(brief_list))
+
+    return {"original" : body, "summary" : brief}
+
 def convert_mp4_to_audio_and_summarize_transcript(directory, file_path):
     video_filename = file_path
     audio_filename = video_filename[:-4] + ".wav"
@@ -16,7 +35,6 @@ def convert_mp4_to_audio_and_summarize_transcript(directory, file_path):
     body = ' '.join(body)
     raw_list = body.split('.')
 
-    model = Summarizer()
     result = model(body, min_length=60)
     brief = ''.join(result)
     print(brief)
@@ -38,4 +56,4 @@ def convert_mp4_to_audio_and_summarize_transcript(directory, file_path):
                 timestamps.append(txt2timestamp[utterance])
     timestamp_and_text = [{"timestamp": time, "text": text} for time, text in zip(timestamps, brief_list)]
     # print(timestamp_and_text)
-    return [timestamp_and_text, body]
+    return {"original": body, "summary": brief, "summary_ts": timestamp_and_text}
